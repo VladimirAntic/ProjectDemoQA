@@ -1,7 +1,10 @@
 package Tests;
 
 import Base.BaseTest;
+import Pages.WebTables;
+import com.beust.ah.A;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.testng.Assert;
@@ -9,31 +12,33 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class DemoQAPageTests extends BaseTest {
+import java.util.List;
 
+public class DemoQAPageTests extends BaseTest {
     @BeforeMethod
     public void pageSetUp(){
         driver.navigate().to("https://demoqa.com/");
-
-
     }
 
-/*
 @Test(invocationCount = 2)
 public void testFlow() throws InterruptedException {
+
         userCanFillForm();
-        Thread.sleep(3000);
         confirmationFormTest();
-    Thread.sleep(3000);
         webElementsIsPresent();
-    Thread.sleep(3000);
+        testingWebElements();
+        elementsIsPresent();
+        testingelementsAndMessage();
+        webtablesElementstest();
+        userCanFillFormWithRandomFields();
+        userCanDeleteForms();
+        userCanSearchEntries();
         fillFormWithExcelFile();
-    Thread.sleep(3000);
         userCanFillFormWithJustMandatoryFields();
-    Thread.sleep(3000);
         userCanFillFormWithAllFields();
+
 }
-*/
+
 //============Elements page tests===============
 
     //++++++++Text Box page tests+++++++++++++++
@@ -91,25 +96,119 @@ public void testFlow() throws InterruptedException {
 
     }
     @Test(priority = 12)
-    public void TestingWebElements() throws InterruptedException {
+    public void testingWebElements() throws InterruptedException {
         homePage.clickOnCard("Elements");
         sidebarPage.clickOnSidebarButton("Check Box");
+        checkboxPage.clickOnExpandButtono();
+        JavascriptExecutor js = (JavascriptExecutor)driver;
+        js.executeScript("arguments[0].scrollIntoView(true);",checkboxPage.getDownloadsFolder());
+        Assert.assertEquals(17, checkboxPage.getUncheckedCheckbox().size());
         checkboxPage.clickOnHomeFolder();
         checkboxPage.clickOnExpandButtono();
         checkboxPage.clickOnDesktopFolder();
+        Assert.assertEquals(3, checkboxPage.getUncheckedCheckbox().size());
         checkboxPage.clickOnColapseButton();
         checkboxPage.clickOnExpandButtono();
         checkboxPage.clickOnDocumentFolde();
-        Thread.sleep(2000);
-        JavascriptExecutor js = (JavascriptExecutor)driver;
+        Assert.assertEquals(13, checkboxPage.getUncheckedCheckbox().size());
+        Thread.sleep(1000);
         js.executeScript("arguments[0].scrollIntoView(true);",checkboxPage.getDownloadsFolder());
         checkboxPage.clickOnDownloadsFolder();
+        Assert.assertEquals(17, checkboxPage.getUncheckedCheckbox().size());
         checkboxPage.clickOnColapseButton();
-
     }
 
-    //++++++++++++Elements page tests++++++++++++++++++++++++
+    //++++++++++++Radio Button page tests++++++++++++++++++++++++
+    @Test(priority = 13)
+    public void elementsIsPresent() {
+        homePage.clickOnCard("Elements");
+        sidebarPage.clickOnSidebarButton("Radio Button");
+        Assert.assertTrue(radioButtonPage.getImpressiveRadioButton().isDisplayed());
+        Assert.assertTrue(radioButtonPage.getYesRadioButton().isDisplayed());
+        Assert.assertTrue(radioButtonPage.getNoRadio().isDisplayed());
+    }
+    @Test(priority = 14)
+    public void testingelementsAndMessage() throws InterruptedException {
+        homePage.clickOnCard("Elements");
+        sidebarPage.clickOnSidebarButton("Radio Button");
+        radioButtonPage.clickOnYesRadioButton();
+        Assert.assertTrue(radioButtonPage.getYesMessage().isDisplayed());
+        boolean isImpressiveMessagePresent = false;
+        try {isImpressiveMessagePresent = radioButtonPage.getImpressiveMessage().isDisplayed();
+        } catch (Exception e) {}
+        Assert.assertFalse(isImpressiveMessagePresent);
+        Thread.sleep(2000);
+        radioButtonPage.clickOnImpressiveRadioButton();
+        Assert.assertTrue(radioButtonPage.getImpressiveMessage().isDisplayed());
+        boolean isYesMessagePresent = false;
+        try {isYesMessagePresent = radioButtonPage.getYesMessage().isDisplayed();
+        } catch (Exception e) {}
+        Assert.assertFalse(isYesMessagePresent);
+        Thread.sleep(2000);
+        radioButtonPage.clickOnYesRadioButton();
+        Assert.assertTrue(radioButtonPage.getYesMessage().isDisplayed());
+        try {isImpressiveMessagePresent = radioButtonPage.getImpressiveMessage().isDisplayed();
+        } catch (Exception e) {}
+        Assert.assertFalse(isImpressiveMessagePresent);
+        Thread.sleep(2000);
+        radioButtonPage.clickOnImpressiveRadioButton();
+        Assert.assertTrue(radioButtonPage.getImpressiveMessage().isDisplayed());
+        try {isYesMessagePresent = radioButtonPage.getYesMessage().isDisplayed();
+        } catch (Exception e) {}
+        Assert.assertFalse(isYesMessagePresent);
+    }
+
+    //++++++++++++Webtables page tests++++++++++++++++++++++++
+
     @Test(priority = 15)
+    public void webtablesElementstest(){
+        homePage.clickOnCard("Elements");
+        sidebarPage.clickOnSidebarButton("Web Tables");
+        Assert.assertTrue(webTables.getSearchBox().isDisplayed());
+        Assert.assertTrue(webTables.getAddButton().isDisplayed());
+        Assert.assertTrue(webTables.getSearchBox().isDisplayed());
+    }
+    @Test(priority = 16)
+    public void userCanFillFormWithRandomFields(){
+        homePage.clickOnCard("Elements");
+        sidebarPage.clickOnSidebarButton("Web Tables");
+        Assert.assertEquals(3, webTables.getDeletebuttons().size());
+        webTables.fillForm(5);
+        Assert.assertEquals(8, webTables.getDeletebuttons().size());
+    }
+    @Test(priority = 17)
+    public void userCanDeleteForms() throws InterruptedException {
+        homePage.clickOnCard("Elements");
+        sidebarPage.clickOnSidebarButton("Web Tables");
+
+        webTables.deleteAll();
+        Assert.assertEquals(0, webTables.getDeletebuttons().size());
+        webTables.fillForm(5);
+
+        webTables.deleteAll();
+        Assert.assertEquals(0, webTables.getDeletebuttons().size());
+    }
+    @Test(priority = 18)
+    public void userCanSearchEntries() {
+        homePage.clickOnCard("Elements");
+        sidebarPage.clickOnSidebarButton("Web Tables");
+        String search = "John";
+        webTables.useSeachBox(search);
+        boolean contains = false;
+        webTables.deleteAll();
+        do {
+            webTables.fillForm(1);
+            for (int i = 0; i < webTables.getRowInfo().size(); i++) {
+                    if (webTables.rowText(i).toUpperCase().contains(search.toUpperCase())) {
+                        contains = true;
+                    }
+                }
+        }
+        while (!contains);
+        Assert.assertTrue(contains = true);
+    }
+
+    @Test(priority = 19)
     public void fillFormWithExcelFile() {
         homePage.clickOnCard("Elements");
         sidebarPage.clickOnSidebarButton("Web Tables");
@@ -128,33 +227,36 @@ public void testFlow() throws InterruptedException {
         webTables.getDepartmentField().sendKeys(department);
         webTables.clickOnSubmitButton();
     }
+
     //============Practice Forms page tests===============
     @Test(priority = 20)
     public void userCanFillFormWithJustMandatoryFields() {
+        driver.navigate().to("https://demoqa.com/");
         homePage.clickOnCard("Forms");
         sidebarPage.clickOnSidebarButton("Practice Form");
-        practiceFormPage.inputFirstName("Vlada");
-        practiceFormPage.inputLastName("Antic");
+        wait.until(ExpectedConditions.elementToBeClickable(practiceFormPage.getFirstName()));
+        practiceFormPage.inputFirstName();
+        practiceFormPage.inputLastName();
         practiceFormPage.chooseGender();
-        practiceFormPage.inputMobileNumber("1234567890");
+        practiceFormPage.inputMobileNumber();
         practiceFormPage.clickOnSubmit();
-        practiceFormPage.clickOnCloseButton();
-
     }
-
     @Test(priority = 21)
     public void userCanFillFormWithAllFields() {
+        driver.navigate().to("https://demoqa.com/");
         homePage.clickOnCard("Forms");
         sidebarPage.clickOnSidebarButton("Practice Form");
-        practiceFormPage.inputFirstName("Vlada");
-        practiceFormPage.inputLastName("Antic");
-        practiceFormPage.inputEmail("mail@mail.com");
-        practiceFormPage.inputDate("13 June 2000");
+        practiceFormPage.inputFirstName();
+        practiceFormPage.inputLastName();
+        practiceFormPage.inputEmail();
+        practiceFormPage.inputDate();
         practiceFormPage.chooseGender();
-        practiceFormPage.inputMobileNumber("1231231231");
+        practiceFormPage.inputMobileNumber();
         practiceFormPage.inputCurrentAddress();
+        practiceFormPage.inputSubject();
+        practiceFormPage.inputHobbies();
         practiceFormPage.clickOnSubmit();
-        practiceFormPage.clickOnCloseButton();
-
+        //practiceFormPage.clickOnCloseButton();
     }
+
 }

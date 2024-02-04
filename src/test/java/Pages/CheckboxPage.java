@@ -3,6 +3,7 @@ package Pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
@@ -14,7 +15,11 @@ public class CheckboxPage {
     }
 
     WebElement folders, homeFolder, desktopFolder, documentsFolder,
-            downloadsFolder, collapseButton, expandButton;
+            downloadsFolder, collapseButton, expandButton, uncheckedCheckbox;
+
+    public List<WebElement> getUncheckedCheckbox() {
+        return driver.findElements(By.cssSelector(".rct-icon.rct-icon-uncheck"));
+    }
 
     public List<WebElement> getFolders() {
         return driver.findElements(By.className("rct-title"));

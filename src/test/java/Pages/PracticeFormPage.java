@@ -1,16 +1,23 @@
 package Pages;
 
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.Select;
+import com.github.javafaker.Faker;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.openqa.selenium.Keys.ENTER;
+import static org.openqa.selenium.Keys.SPACE;
 
 public class PracticeFormPage {
 
     WebDriver driver;
-    WebElement firstName, lastName, email, gender, mobile, dateOfBirth, subjects, hobbies, picture, currentAddress, state, city, submitButton, closeButton;
+    WebElement firstName, lastName, email, gender, mobile, dateOfBirth,
+            subjects, hobbies, currentAddress, state,
+            city, submitButton, closeButton, uploadPicture;
 
     public PracticeFormPage(WebDriver driver) {
         this.driver = driver;
@@ -20,9 +27,7 @@ public class PracticeFormPage {
         return driver.findElement(By.id("submit"));
     }
 
-    public WebElement getFirstName() {
-        return driver.findElement(By.id("firstName"));
-    }
+    public WebElement getFirstName() {return driver.findElement(By.id("firstName"));}
 
     public WebElement getLastName() {
         return driver.findElement(By.id("lastName"));
@@ -46,28 +51,52 @@ public class PracticeFormPage {
 
     public WebElement getCloseButton() { return driver.findElement(By.id("closeLargeModal"));}
 
-
-
     public WebElement getCurrentAddressField() {
         return driver.findElement(By.id("currentAddress"));
     }
 
+    public WebElement getSubjects() {
+        return driver.findElement(By.id("subjectsInput"));
+    }
 
-    //----------------------------
+    public List<WebElement> getHobbies() {
+        return driver.findElements(By.cssSelector("input[type='checkbox']"));
+    }
 
-    public void inputFirstName(String firstName) {
+    public WebElement getUploadPicture() {
+        return driver.findElement(By.id("uploadPicture"));
+    }
+
+    public WebElement getCurrentAddress() {
+        return currentAddress;
+    }
+
+    public WebElement getState() {
+        return state;
+    }
+
+    public WebElement getCity() {
+        return city;
+    }
+
+
+//----------------------------
+
+    Faker faker = new Faker();
+
+    public void inputFirstName() {
         getFirstName().clear();
-        getFirstName().sendKeys(firstName);
+        getFirstName().sendKeys(faker.name().firstName());
     }
 
-    public void inputLastName(String lastName) {
+    public void inputLastName() {
         getLastName().clear();
-        getLastName().sendKeys(lastName);
+        getLastName().sendKeys(faker.name().lastName());
     }
 
-    public void inputMobileNumber(String number) {
+    public void inputMobileNumber() {
         getMobile().clear();
-        getMobile().sendKeys(number);
+        getMobile().sendKeys(faker.number().digits(10));
     }
 
     public void chooseGender() {
@@ -78,25 +107,37 @@ public class PracticeFormPage {
         getSubmitButton().submit();
     }
 
-    public void inputEmail(String email) {
+    public void inputEmail() {
         getEmail().clear();
-        getEmail().sendKeys(email);
+        getEmail().sendKeys(faker.internet().emailAddress());
     }
 
-    public void inputDate(String date) {
+    public void inputDate() {
         getDateOfBirth().click();
         getDateOfBirth().sendKeys(Keys.CONTROL + "a");
-        getDateOfBirth().sendKeys(date);
+        getDateOfBirth().sendKeys(faker.date().birthday().toString());
         getDateOfBirth().sendKeys(ENTER);
     }
 
     public void inputCurrentAddress(){
         getCurrentAddressField().clear();
-        getCurrentAddressField().sendKeys("Cara Kralja 23");
+        getCurrentAddressField().sendKeys(faker.address().fullAddress());
     }
     public void clickOnCloseButton(){
         getCloseButton().click();
     }
 
+    public void inputSubject(){
+        getSubjects().clear();
+        getSubjects().sendKeys("faker.job().title()");
+    }
+
+    public void inputHobbies(){
+       int i = faker.number().numberBetween(0,2);
+        getHobbies().get(i).sendKeys(SPACE);
+    }
+
+
 }
+
 

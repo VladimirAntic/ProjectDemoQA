@@ -21,9 +21,9 @@ public class BaseTest {
 
     public TextBoxPage textBoxPage;
     public CheckboxPage checkboxPage;
-
     public WebTables webTables;
 
+    public RadioButtonPage radioButtonPage;
     public WebDriverWait wait;
     public ExcelReader excelReader;
 
@@ -37,7 +37,7 @@ public class BaseTest {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         wait = new WebDriverWait(driver, Duration.ofSeconds(6));
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
         excelReader = new ExcelReader("Data.xlsx");
 
 
@@ -47,5 +47,6 @@ public class BaseTest {
         webTables = new WebTables(driver);
         textBoxPage = new TextBoxPage(driver);
         checkboxPage = new CheckboxPage(driver);
+        radioButtonPage = new RadioButtonPage(driver);
     }
 }
