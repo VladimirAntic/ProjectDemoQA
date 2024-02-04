@@ -3,6 +3,7 @@ package Tests;
 import Base.BaseTest;
 import Pages.WebTables;
 import com.beust.ah.A;
+import com.github.javafaker.Faker;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,6 +13,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DemoQAPageTests extends BaseTest {
@@ -19,7 +21,7 @@ public class DemoQAPageTests extends BaseTest {
     public void pageSetUp(){
         driver.navigate().to("https://demoqa.com/");
     }
-
+/*
 @Test(invocationCount = 2)
 public void testFlow() throws InterruptedException {
 
@@ -34,20 +36,21 @@ public void testFlow() throws InterruptedException {
         userCanDeleteForms();
         userCanSearchEntries();
         fillFormWithExcelFile();
+        linksPagetest();
         userCanFillFormWithJustMandatoryFields();
         userCanFillFormWithAllFields();
-
 }
-
+*/
 //============Elements page tests===============
 
     //++++++++Text Box page tests+++++++++++++++
     @Test(priority = 10)
     public void userCanFillForm(){
-        String fullName = "Antic Vladimir";
-        String email = "mail@mail.com";
-        String currentAddress = "Cara Kralja 11";
-        String permanentAddress = "Bata Djosa 5";
+        Faker faker = new Faker();
+        String fullName = faker.name().fullName();
+        String email = faker.internet().emailAddress();
+        String currentAddress = faker.address().fullAddress();
+        String permanentAddress = faker.address().secondaryAddress();
         homePage.clickOnCard("Elements");
         sidebarPage.clickOnSidebarButton("Text Box");
         Assert.assertTrue(textBoxPage.getSubmitButton().isDisplayed());
@@ -63,10 +66,11 @@ public void testFlow() throws InterruptedException {
     }
     @Test(priority = 11)
     public  void confirmationFormTest(){
-        String fullName = "Antic Vladimir";
-        String email = "mail@mail.com";
-        String currentAddress = "Cara Kralja 11";
-        String permanentAddress = "Bata Djosa 5";
+        Faker faker = new Faker();
+        String fullName = faker.name().fullName();
+        String email = faker.internet().emailAddress();
+        String currentAddress = faker.address().fullAddress();
+        String permanentAddress = faker.address().secondaryAddress();
         homePage.clickOnCard("Elements");
         sidebarPage.clickOnSidebarButton("Text Box");
         Assert.assertTrue(textBoxPage.getSubmitButton().isDisplayed());
@@ -192,7 +196,7 @@ public void testFlow() throws InterruptedException {
     public void userCanSearchEntries() {
         homePage.clickOnCard("Elements");
         sidebarPage.clickOnSidebarButton("Web Tables");
-        String search = "John";
+        String search = "yahoo";
         webTables.useSeachBox(search);
         boolean contains = false;
         webTables.deleteAll();
@@ -228,8 +232,50 @@ public void testFlow() throws InterruptedException {
         webTables.clickOnSubmitButton();
     }
 
-    //============Practice Forms page tests===============
+    //============Links page tests===============
+
     @Test(priority = 20)
+    public void linksPagetest() throws InterruptedException {
+        homePage.clickOnCard("Elements");
+        sidebarPage.clickOnSidebarButton("Links");
+        linksPage.clickOnHomeLink();
+        ArrayList<String> listaTabova =new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(listaTabova.get(1));
+        Assert.assertEquals(driver.getCurrentUrl(), "https://demoqa.com/");
+        driver.close();
+        driver.switchTo().window(listaTabova.get(0));
+        Thread.sleep(1000);
+        linksPage.clickOnCreated();
+        Assert.assertEquals(linksPage.LinkResponseText(),
+                "Link has responded with staus 201 and status text Created");
+        linksPage.clickOnNoContent();
+        Thread.sleep(1000);
+        Assert.assertEquals(linksPage.LinkResponseText(),
+                "Link has responded with staus 204 and status text No Content");
+        linksPage.clickOnMoved();
+        Thread.sleep(1000);
+        Assert.assertEquals(linksPage.LinkResponseText(),
+                "Link has responded with staus 301 and status text Moved Permanently");
+        linksPage.clickOnBadRequest();
+        Thread.sleep(1000);
+        Assert.assertEquals(linksPage.LinkResponseText(),
+                "Link has responded with staus 400 and status text Bad Request");
+        linksPage.cliclOnUnauthorized();
+        Thread.sleep(1000);
+        Assert.assertEquals(linksPage.LinkResponseText(),
+                "Link has responded with staus 401 and status text Unauthorized");
+        linksPage.clickOnForbidden();
+        Thread.sleep(1000);
+        Assert.assertEquals(linksPage.LinkResponseText(),
+                "Link has responded with staus 403 and status text Forbidden");
+        linksPage.clickOnNotFound();
+        Thread.sleep(1000);
+        Assert.assertEquals(linksPage.LinkResponseText(),
+                "Link has responded with staus 404 and status text Not Found");
+    }
+
+    //============Practice Forms page tests===============
+    @Test(priority = 21)
     public void userCanFillFormWithJustMandatoryFields() {
         driver.navigate().to("https://demoqa.com/");
         homePage.clickOnCard("Forms");
@@ -241,7 +287,7 @@ public void testFlow() throws InterruptedException {
         practiceFormPage.inputMobileNumber();
         practiceFormPage.clickOnSubmit();
     }
-    @Test(priority = 21)
+    @Test(priority = 22)
     public void userCanFillFormWithAllFields() {
         driver.navigate().to("https://demoqa.com/");
         homePage.clickOnCard("Forms");

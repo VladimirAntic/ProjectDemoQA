@@ -22,8 +22,8 @@ public class BaseTest {
     public TextBoxPage textBoxPage;
     public CheckboxPage checkboxPage;
     public WebTables webTables;
-
     public RadioButtonPage radioButtonPage;
+    public LinksPage linksPage;
     public WebDriverWait wait;
     public ExcelReader excelReader;
 
@@ -48,5 +48,6 @@ public class BaseTest {
         textBoxPage = new TextBoxPage(driver);
         checkboxPage = new CheckboxPage(driver);
         radioButtonPage = new RadioButtonPage(driver);
+        linksPage = new LinksPage(driver);
     }
 }
