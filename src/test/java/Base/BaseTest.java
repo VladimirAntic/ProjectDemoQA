@@ -18,7 +18,6 @@ public class BaseTest {
     public HomePage homePage;
     public SidebarPage sidebarPage;
     public PracticeFormPage practiceFormPage;
-
     public TextBoxPage textBoxPage;
     public CheckboxPage checkboxPage;
     public WebTables webTables;
@@ -26,9 +25,6 @@ public class BaseTest {
     public LinksPage linksPage;
     public WebDriverWait wait;
     public ExcelReader excelReader;
-
-
-
 
 
     @BeforeClass

@@ -21,7 +21,7 @@ public class DemoQAPageTests extends BaseTest {
     public void pageSetUp(){
         driver.navigate().to("https://demoqa.com/");
     }
-/*
+
 @Test(invocationCount = 2)
 public void testFlow() throws InterruptedException {
 
@@ -34,13 +34,13 @@ public void testFlow() throws InterruptedException {
         webtablesElementstest();
         userCanFillFormWithRandomFields();
         userCanDeleteForms();
-        userCanSearchEntries();
+        userCanSearchEntireTable();
         fillFormWithExcelFile();
         linksPagetest();
         userCanFillFormWithJustMandatoryFields();
         userCanFillFormWithAllFields();
 }
-*/
+
 //============Elements page tests===============
 
     //++++++++Text Box page tests+++++++++++++++
@@ -184,34 +184,18 @@ public void testFlow() throws InterruptedException {
     public void userCanDeleteForms() throws InterruptedException {
         homePage.clickOnCard("Elements");
         sidebarPage.clickOnSidebarButton("Web Tables");
-
         webTables.deleteAll();
         Assert.assertEquals(0, webTables.getDeletebuttons().size());
         webTables.fillForm(5);
-
         webTables.deleteAll();
         Assert.assertEquals(0, webTables.getDeletebuttons().size());
     }
     @Test(priority = 18)
-    public void userCanSearchEntries() {
+    public void userCanSearchEntireTable() {
         homePage.clickOnCard("Elements");
         sidebarPage.clickOnSidebarButton("Web Tables");
-        String search = "yahoo";
-        webTables.useSeachBox(search);
-        boolean contains = false;
-        webTables.deleteAll();
-        do {
-            webTables.fillForm(1);
-            for (int i = 0; i < webTables.getRowInfo().size(); i++) {
-                    if (webTables.rowText(i).toUpperCase().contains(search.toUpperCase())) {
-                        contains = true;
-                    }
-                }
-        }
-        while (!contains);
-        Assert.assertTrue(contains = true);
+        webTables.SearchEntireTable("yahoo");
     }
-
     @Test(priority = 19)
     public void fillFormWithExcelFile() {
         homePage.clickOnCard("Elements");
@@ -241,6 +225,7 @@ public void testFlow() throws InterruptedException {
         linksPage.clickOnHomeLink();
         ArrayList<String> listaTabova =new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(listaTabova.get(1));
+        Thread.sleep(2000);
         Assert.assertEquals(driver.getCurrentUrl(), "https://demoqa.com/");
         driver.close();
         driver.switchTo().window(listaTabova.get(0));
@@ -302,7 +287,7 @@ public void testFlow() throws InterruptedException {
         practiceFormPage.inputSubject();
         practiceFormPage.inputHobbies();
         practiceFormPage.clickOnSubmit();
-        //practiceFormPage.clickOnCloseButton();
+        practiceFormPage.clickOnCloseButton();
     }
 
 }

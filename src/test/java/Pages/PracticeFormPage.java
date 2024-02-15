@@ -129,7 +129,7 @@ public class PracticeFormPage {
 
     public void inputSubject(){
         getSubjects().clear();
-        getSubjects().sendKeys("faker.job().title()");
+        getSubjects().sendKeys(faker.job().title());
     }
 
     public void inputHobbies(){

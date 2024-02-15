@@ -28,7 +28,6 @@ public class WebTables {
              RowInfo, CellInfo, deletebuttons;
 
 
-
     public WebElement getAddButton() {
         return driver.findElement(By.id("addNewRecordButton"));
     }
@@ -69,7 +68,6 @@ public class WebTables {
         return driver.findElement(By.cssSelector("span[title='Delete']"));
     }
 
-
     public List<WebElement> getRowInfo() {return driver.findElements(By.className("rt-tr-group"));}
 
     public List<WebElement> getCellInfo() {return driver.findElements(By.className("rt-td"));}
@@ -80,19 +78,6 @@ public class WebTables {
     }
 
     //----------------------------
-    public List<WebElement> getDeletebuttons() {
-        List<WebElement> list = new ArrayList<>();
-        boolean element = false;
-        for(int i =1;i<=8;i++){
-            try{WebElement x = driver.findElement(By.id("delete-record-"+i));
-                element = x.isDisplayed();}catch (Exception e){}
-            if(element) {
-                list.add(driver.findElement(By.id("delete-record-"+i)));}
-            element = false;
-        }
-        return list;
-    }
-
 
     public void clickOnSubmitButton(){
         getSubmitButton().click();
@@ -100,15 +85,42 @@ public class WebTables {
     public void clickOnAddButton(){
         getAddButton().click();
     }
-
     public void clickOnDeleteButton(){
         getDeleteButton().click();
+    }
+
+    public List<WebElement> getDeletebuttons() {
+        List<WebElement> list = new ArrayList<>();
+        boolean element = false;
+        for(int i =1;i<=8;i++){
+            try{WebElement x = driver.findElement(By.id("delete-record-"+i));
+                element = x.isDisplayed();}
+            catch (Exception e){}
+            if(element) {
+                list.add(driver.findElement(By.id("delete-record-"+i)));}
+            element = false;
+        }
+        return list;
     }
     public void deleteAll(){
         int counter = getDeletebuttons().size();
         for(int i=0;i<counter;i++){
             clickOnDeleteButton();
         }
+    }
+    public void SearchEntireTable(String target){
+        useSeachBox(target);
+        boolean contains = false;
+        deleteAll();
+        do {
+            fillForm(1);
+            for (int i = 0; i < getRowInfo().size(); i++) {
+                if (rowText(i).toUpperCase().contains(target.toUpperCase())) {
+                    contains = true;
+                }
+            }
+        }
+        while (!contains);
     }
     public void fillForm(int numberOfForm){
         Faker faker = new Faker();
@@ -129,7 +141,6 @@ public class WebTables {
             clickOnSubmitButton();
         }
     }
-
     public void useSeachBox(String x){
         getSearchBox().clear();
         getSearchBox().sendKeys(x);

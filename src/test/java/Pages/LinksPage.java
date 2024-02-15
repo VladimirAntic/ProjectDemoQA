@@ -53,19 +53,17 @@ public class LinksPage {
 
     //____________________________________________________________
 
+    public String LinkResponseText(){
+        String temp;
+        temp = getLinkResponse().getText();
+        return temp;
+    }
+
     public void clickOnHomeLink(){
         getHomeLink().click();
     }
     public  void clickOnCreated(){
         getCreatedLink().click();
-    }
-    public String LinkResponseText(){
-        String temp;
-        temp = new String();
-        temp = getLinkResponse().getText();
-       return temp;
-
-
     }
     public void clickOnNoContent(){
         getNoContent().click();
